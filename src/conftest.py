@@ -6,7 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def appium_driver():
     appium_url = "http://127.0.0.1:4723/wd/hub"
     # Create a desired capabilities object as a starting point.
