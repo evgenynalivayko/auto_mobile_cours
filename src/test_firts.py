@@ -38,6 +38,10 @@ def wait_for_element_and_clear(driver, locator, error_message, timeout_in_second
     return element
 
 
+def assert_element_has_text(element_locator, expected_text, error_message):
+    assert element_locator.text == expected_text, error_message
+
+
 def test_first(appium_driver):
     appium_driver.find_element_by_id("org.wikipedia:id/fragment_onboarding_skip_button").click()
     wait_for_element_and_click(
@@ -114,3 +118,13 @@ def test_compare_article_title(appium_driver):
         timeout_in_second=20
     )
     assert title_element.text == "Java (programming language)", "We see unexpected title!"
+
+
+def test_text_in_search_input(appium_driver):
+    appium_driver.find_element_by_id("org.wikipedia:id/fragment_onboarding_skip_button").click()
+    element_locator = wait_for_element_present(
+        driver=appium_driver,
+        locator=(By.XPATH, "//*[@resource-id='org.wikipedia:id/voice_search_button']/preceding-sibling::*[1]"),
+        error_message="Cannot find 'Search Wikipedia' input"
+    )
+    assert_element_has_text(element_locator, "Search Wikipedia", "Invalid text in search input!")
