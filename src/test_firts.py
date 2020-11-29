@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import time
 
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
@@ -166,3 +165,27 @@ def test_list_search_results_and_clear_results(appium_driver):
         locator=(By.XPATH, "//*[@resource-id='org.wikipedia:id/search_results_list']"),
         error_message="Search result is still present on the page"
     )
+
+
+def test_relevant_search_result(appium_driver):
+    appium_driver.find_element_by_id(
+        "org.wikipedia:id/fragment_onboarding_skip_button").click()
+    wait_for_element_and_click(
+        driver=appium_driver,
+        locator=(By.XPATH, "//*[contains(@text,'Search Wikipedia')]"),
+        error_message="Cannot find 'Search Wikipedia' input"
+    )
+    wait_for_element_and_send_keys(
+        value="JAVA",
+        driver=appium_driver,
+        locator=(
+        By.XPATH, "//*[@resource-id='org.wikipedia:id/search_src_text']"),
+        error_message="Cannot find 'Search Wikipedia' input"
+    )
+    list_search_results = wait_for_elements_present(
+        driver=appium_driver,
+        locator=(By.XPATH, "//*[@resource-id='org.wikipedia:id/page_list_item_title']"),
+        error_message="Cannot find list elements result"
+    )
+    for element_result in list_search_results:
+        assert "JAVA".lower() in element_result.text.lower()
